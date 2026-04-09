@@ -1,0 +1,26 @@
+services:
+  viewer:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - data:/app/data
+    restart: unless-stopped
+
+  scraper:
+    build: .
+    volumes:
+      - data:/app/data
+    entrypoint: ["python3", "oikotie_metro.py"]
+    command:
+      - --price-min=100000
+      - --price-max=300000
+      - --rooms-min=3
+      - --size-min=50
+      - --metro-max=15
+      - --max-pages=30
+    profiles:
+      - scrape
+
+volumes:
+  data:
